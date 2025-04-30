@@ -1,0 +1,271 @@
+﻿@model Application.ViewModels.User.Admin.AdministrationUsersVM
+@inject IHttpContextAccessor httpcontext;
+@using Application.DTOs.UserDtos
+@using Application.Helpers;
+@using Application.Enums
+@{
+    var user = httpcontext.HttpContext?.Session.Get<AuthenticationResponse>("user");
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración de Usuarios</title>
+    <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
+    <style>
+        body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #e8e8e8;
+        color: #333;
+        }
+
+        .main-dashboard {
+        width: 90%;
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 20px;
+        }
+
+        .btn-add-user {
+        display: inline-block;
+        padding: 10px 15px;
+        margin-bottom: 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: bold;
+        }
+
+        .btn-add-user:hover {
+        background-color: #0056b3;
+        }
+
+        .user-list {
+        margin-top: 20px;
+        }
+
+        .user-list h2 {
+        color: #444;
+        border-bottom: 2px solid #ddd;
+        padding-bottom: 5px;
+        }
+
+        table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+        }
+
+        table th, table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        }
+
+        table th {
+        background-color: #007bff;
+        color: white;
+        }
+
+        table tr:hover {
+        background-color: #f1f1f1;
+        }
+
+        .status-active {
+        color: green;
+        font-weight: bold;
+        }
+
+        .status-inactive {
+        color: red;
+        font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-dashboard">
+        <h1>Administración de Usuarios</h1>
+
+        <a href="@Url.Action("Register", "User")" class="btn-add-user"> + Add User</a>
+
+        <div class="user-list">
+            <h2>Administradores</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th> Editar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var admin in Model.Admins)
+                    {
+
+                        <tr>
+                            <td>@admin.UserName</td>
+                            <td>@admin.Email</td>
+                            @if (user.UserName == admin.UserName)
+                            {
+                                <td>
+                                    <a class="btn btn-primary"
+                                       asp-controller="User"
+                                       asp-action="Update"
+                                       asp-route-username="@admin.UserName"
+                                       asp-route-Roles="@admin.Roles">
+                                        Editar Admin
+                                    </a>
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="user-list">
+            <h2>Clientes</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Editar </th>
+                        <th>Producto </th>
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var client in Model.Clients)
+                    {
+                        <tr>
+                            <td>@client.UserName</td>
+                            <td>@client.Email</td>
+                            <td>
+                                <a class="btn btn-primary"
+                                   asp-controller="User"
+                                   asp-action="Update"
+                                   asp-route-username="@client.UserName"
+                                   asp-route-Roles="@client.Email">
+                                    Editar Cliente
+                                </a>
+                            </td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Agregar producto
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="SavingsAccount" asp-action="Create" asp-route-UserId="@client.Id">
+                                                Cuenta Ahorro
+                                            </a>
+
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="CreditCard" asp-action="Create" asp-route-UserId="@client.Id">
+                                                Tarjeta de Credito
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Loan" asp-action="Create" asp-route-UserId="@client.Id">
+                                                Prestamo
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="user-list">
+            <h2>Usuarios Activos</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Estado</th>
+                        <th>Desactivar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var activeUser in Model.ActiveUsers)
+                    {
+                        <tr>
+                            <td>@activeUser.UserName</td>
+                            <td>@activeUser.Email</td>
+                            <td class="status-active">Activo</td>
+                            <td>
+                                <a class="btn btn-danger"
+                                   asp-controller="User"
+                                   asp-action="ActivateORDisActivateUser"
+                                   asp-route-username="@activeUser.UserName"
+                                   asp-route-state="false">
+                                    Desactivar
+                                </a>
+                            </td>
+                            
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="user-list">
+            <h2>Usuarios Inactivos</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Estado</th>
+                        <th>Activar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var inactiveUser in Model.InactiveUsers)
+                    {
+                        <tr>
+                            <td>@inactiveUser.UserName</td>
+                            <td>@inactiveUser.Email</td>
+                            <td class="status-inactive">Inactivo</td>
+                            <td >
+                                <a class="btn btn-success"
+                                   asp-controller="User"
+                                   asp-action="ActivateORDisActivateUser"
+                                   asp-route-username="@inactiveUser.UserName"
+                                   asp-route-state="true">
+                                    Activar
+                                </a>
+                            </td>
+                            
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+

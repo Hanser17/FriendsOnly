@@ -1,0 +1,44 @@
+﻿@using Application.ViewModels.User
+@model LoginUserViewModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Login";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="main">
+        <div class="login">
+            <form method="post" asp-controller="User" asp-action="Index">
+                <label>Login</label>
+                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                @if (Model.HasError)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <p>@Model.Error</p>
+                    </div>
+                }
+                <input asp-for="UserName" type="text" placeholder="User name" required>
+                <input asp-for="Password" type="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+                <div class="button-group">
+                    <button type="button" class="btn btn-warning" onclick="location.href='@Url.Action("ForgotPassword", "User")'">Forgot Password</button>
+                    <button type="button" class="btn btn-info" onclick="location.href='@Url.Action("Register", "User")'">Sign in</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+</body>
+</html>
+

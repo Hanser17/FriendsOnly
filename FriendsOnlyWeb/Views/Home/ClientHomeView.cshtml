@@ -1,0 +1,281 @@
+﻿
+@model Application.ViewModels.User.Client.ClientHomeVm
+@inject IHttpContextAccessor httpcontext;
+@using Application.DTOs.UserDtos
+@using Application.Helpers;
+@using Application.Enums
+@{
+    var user = httpcontext.HttpContext?.Session.Get<AuthenticationResponse>("user");
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración de Usuarios</title>
+    <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
+    <script>
+        let deleteUrl = '';
+        
+        function showDeleteModal(url) {
+            deleteUrl = url;
+            var deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            deleteModal.show();
+        }
+
+        function confirmDelete() {
+            window.location.href = deleteUrl;
+        }
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e8e8e8;
+            color: #333;
+        }
+
+        .main-dashboard {
+            width: 90%;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .btn-add-user {
+            display: inline-block;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+            .btn-add-user:hover {
+                background-color: #0056b3;
+            }
+
+        .user-list {
+            margin-top: 20px;
+        }
+
+            .user-list h2 {
+                color: #444;
+                border-bottom: 2px solid #ddd;
+                padding-bottom: 5px;
+            }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+            table th, table td {
+                padding: 12px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+
+            table th {
+                background-color: #007bff;
+                color: white;
+            }
+
+            table tr:hover {
+                background-color: #f1f1f1;
+            }
+
+        .status-active {
+            color: green;
+            font-weight: bold;
+        }
+
+        .status-inactive {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-dashboard">
+        <h1>Client Home page </h1>
+
+        <div class="user-list">
+            <h2>Savings Account</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Balance</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var saving in Model.SavingAccounts)
+                    {
+                        <tr>
+                            <td>@saving.Id</td>
+                            <td>@saving.Balance</td>
+                            <td>
+                                @if (saving.IsPrimary)
+                                {
+                                    <span class="badge bg-primary">Cuenta primaria</span>
+                                }
+                                <div class="dropdown">
+                                    <button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Acción
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                       
+                                        @if (!saving.IsPrimary)
+                                        {
+                                            <li>
+                                                <a class="dropdown-item bg-danger" href="#" onclick="showDeleteModal('@Url.Action("Delete", "SavingsAccount", new { Id = saving.Id, Balance = saving.Balance, UserId = saving.UserId })')">
+                                                    Delete
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="user-list">
+            <h2>Prestamos</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Numero de Prestamo</th>
+                        <th>Monto del prestamo</th>
+                        <th> Resdate a pagar </th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var loan in Model.Loans)
+                    {
+                        <tr>
+                            <td>@loan.Id</td>
+                            <td>@loan.Amount</td>
+                            <td>@loan.Debt</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Acción
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a class="dropdown-item bg-success" asp-controller="Payment" asp-action="LoanPayment">
+                                                Pagar
+                                            </a>
+                                        </li>
+                                        @if (loan.Debt <= 0)
+                                        {
+                                            <li>
+                                                <a class="dropdown-item bg-danger" href="#" onclick="showDeleteModal('@Url.Action("Delete", "Loan", new { Id = loan.Id })')">
+                                                    Delete
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="user-list">
+            <h2>Credit Card</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Credit Card Number</th>
+                        <th>Credit Limit</th>
+                        <th>Monto a pagar</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var creditcard in Model.CreditCards)
+                    {
+                        <tr>
+                            <td>@creditcard.Id</td>
+                            <td>@creditcard.CreditLimit</td>
+                            <td>@creditcard.Debt</td>
+                            <td>
+                                
+                                <div class="dropdown">
+                                    <button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Acción
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a class="dropdown-item bg-success" asp-controller="Payment" asp-action="CreditCardPayment">
+                                                Pagar
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item bg-warning" asp-controller="CashAdvance" asp-action="Create">
+                                                Avance Efectivo
+                                            </a>
+                                        </li>
+                                        @if (creditcard.Debt <= 0)
+                                        {
+                                            <li>
+                                                <a class="dropdown-item bg-danger" href="#" onclick="showDeleteModal('@Url.Action("Delete", "CreditCard", new { Id = creditcard.Id })')">
+                                                    Delete
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación de eliminación -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirmar eliminación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que deseas eliminar este elemento?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" onclick="confirmDelete()">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

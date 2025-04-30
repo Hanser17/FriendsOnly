@@ -1,0 +1,55 @@
+﻿@using Application.ViewModels.Payments.CreditCardPayment
+@model CreditCardPaymentVM
+
+<div class="main-dashboard">
+    <h1 class="text-center">Pago tarjeta de Credito</h1>
+
+    <!-- Formulario de pago expreso -->
+    <form asp-action="CreditCardPayment" method="post" id="CreditCardPaymentForm">
+        @if (Model?.creditcards != null && Model.creditcards.Any())
+        {
+            <div class="mb-3">
+                <label for="AccountNumber" class="form-label">Tarjeta Destino</label>
+                <select class="form-select" asp-for="AccountNumber" id="AccountNumber"
+                        asp-items="@(Model.creditcards.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = $"{c.Id} - {c.Debt:C}" }))" required>
+                    <option value="">Seleccione una Tarjeta de Crédito</option>
+                </select>
+                <span asp-validation-for="AccountNumber" class="text-danger"></span>
+            </div>
+
+
+            <div class="mb-3">
+                <label for="amount" class="form-label">Monto</label>
+                <input type="number" class="form-control" asp-for="amount" id="amount" placeholder="Ingrese el monto" min="1" step="0.01" required />
+                <span asp-validation-for="amount" class="text-danger"></span>
+            </div>
+
+            @if (Model?.accounts != null && Model.accounts.Any())
+            {
+                <div class="mb-3">
+                    <label for="SelectedAccountId" class="form-label">Cuenta de Origen</label>
+                    <select class="form-select" asp-for="SelectedAccountId" id="SelectedAccountId"
+                            asp-items="@(Model.accounts.Select(account => new SelectListItem { Value = account.Id.ToString(), Text = $"{account.Id} - {account.Balance:C}" }))" required>
+                        <option value="">Seleccione una cuenta</option>
+                    </select>
+                    <span asp-validation-for="SelectedAccountId" class="text-danger"></span>
+                </div>
+
+            }
+            else
+            {
+                <p>No hay cuentas disponibles.</p>
+            }
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary w-100">Realizar Pago</button>
+            </div>
+        }
+        else
+        {
+            <p>No hay Tarjetas Dispobibles.</p>
+        }
+
+      
+    </form>
+</div>

@@ -1,0 +1,61 @@
+﻿@using Application.ViewModels.Beneficiary;
+@model BeneficiarySaveVM
+
+<div class="main-dashboard">
+    <h1 class="text-center text-black">Agregar Beneficiario</h1>
+
+    <form asp-action="Create" method="post" id="createBeneficiaryForm">
+        <div class="mb-3">
+            <label for="AccountNumber" class="form-label text-black">Número de Cuenta</label>
+            <input type="number" class="form-control" asp-for="AccountNumber" id="AccountNumber" placeholder="Ingrese el número de cuenta" required />
+            <span asp-validation-for="AccountNumber" class="text-danger"></span>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Guardar Beneficiario</button>
+        </div>
+    </form>
+</div>
+
+
+
+
+    <style>
+        .main-dashboard {
+            width: 90%;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            border-radius: 5px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+                border-color: #004494;
+            }
+
+        .text-danger {
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+    </style>
+
+
+

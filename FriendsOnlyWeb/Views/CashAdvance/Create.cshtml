@@ -1,0 +1,56 @@
+﻿@using Application.ViewModels.CashAdvance
+@model CashAdvanceSaveVM
+
+<div class="main-dashboard">
+    <h1 class="text-center">Avance efectivo</h1>
+
+    
+    <form asp-controller="CashAdvance" asp-action="Create" method="post" id="CashAdvanceForm">
+        @if (Model?.creditcards != null && Model.creditcards.Any())
+        {
+            <div class="mb-3">
+                <label for="AccountNumber" class="form-label">Tarjeta</label>
+                <select class="form-select" asp-for="AccountNumber"
+                        asp-items="@(Model.creditcards.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = $"{c.Id} - {c.Debt:C}" }))" required>
+                    <option value="">Seleccione una Tarjeta de Crédito</option>
+                </select>
+                <span asp-validation-for="AccountNumber" class="text-danger"></span>
+            </div>
+
+
+            <div class="mb-3">
+                <label for="amount" class="form-label">Monto</label>
+                <input type="number" class="form-control" asp-for="amount" id="amount" placeholder="Ingrese el monto" min="1" step="0.01" required />
+                <span asp-validation-for="amount" class="text-danger"></span>
+            </div>
+
+            @if (Model?.accounts != null && Model.accounts.Any())
+            {
+                <div class="mb-3">
+                    <label for="SelectedAccountId" class="form-label">Destino</label>
+                    <select class="form-select" asp-for="SelectedAccountId" id="SelectedAccountId"
+                            asp-items="@(Model.accounts.Select(a => new SelectListItem { Value = a.Id.ToString(), Text = $"{a.Id} - {a.Balance:C}" }))" required>
+                        <option value="">Seleccione una cuenta</option>
+                    </select>
+                    <span asp-validation-for="SelectedAccountId" class="text-danger"></span>
+                </div>
+
+            }
+            else
+            {
+                <p>No hay cuentas disponibles.</p>
+            }
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary w-100">Realizar </button>
+            </div>
+        }
+        else
+        {
+            <p>No hay Tarjetas Dispobibles.</p>
+        }
+
+
+    </form>
+</div>
+

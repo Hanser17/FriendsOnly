@@ -1,0 +1,135 @@
+﻿@using Application.ViewModels.User.Admin
+@model HomeViewModel
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .main-dashboard {
+            width: 80%;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 50px; /* Para asegurarse de que haya espacio para el footer */
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            justify-items: center;
+        }
+
+        .dashboard-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+            .dashboard-card:hover {
+                transform: translateY(-10px);
+            }
+
+            .dashboard-card h3 {
+                margin: 10px 0;
+                color: #333;
+            }
+
+            .dashboard-card p {
+                font-size: 1.5rem;
+                font-weight: bold;
+                margin-top: 10px;
+                color: #666;
+            }
+
+        
+        .active {
+            color: green;
+        }
+
+        .inactive {
+            color: red;
+        }
+
+        
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-dashboard">
+        <h1>Dashboard</h1>
+
+        <div class="dashboard-cards">
+            <div class="dashboard-card">
+                <h3>Total Transactions</h3>
+                <p>@Model.TotalTransactions</p>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Transactions Today</h3>
+                <p>@Model.DailyTransactions</p>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Total Payments</h3>
+                <p>@Model.TotalPayments</p>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Payments Today</h3>
+                <p>@Model.DailyPayments</p>
+            </div>
+
+            <div class="dashboard-card bg-success">
+                <h3>Active Customers</h3>
+                <p class="active">@Model.ActiveCustomers</p>
+            </div>
+
+            <div class="dashboard-card bg-danger">
+                <h3>Inactive Customers</h3>
+                <p class="inactive">@Model.InactiveCustomers</p>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 MyBank - All Rights Reserved</p>
+    </footer>
+</body>
+</html>
+
+

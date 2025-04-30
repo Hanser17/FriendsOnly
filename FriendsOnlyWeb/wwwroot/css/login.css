@@ -1,0 +1,136 @@
+﻿/* Estilos para el cuerpo de la página */
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Jost', sans-serif;
+    background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+}
+
+/* Contenedor principal */
+.main {
+    width: 360px;
+    height: auto;
+    background: url("https://source.unsplash.com/random") no-repeat center/cover;
+    border-radius: 15px;
+    box-shadow: 5px 20px 50px rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    position: relative;
+    backdrop-filter: blur(5px); /* Fondo borroso */
+}
+
+    /* Capa de sombra sobre el fondo */
+    .main::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 15px;
+        z-index: 1;
+    }
+
+/* Estilos para el contenedor de login */
+.login {
+    width: 100%;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+    /* Estilo para los formularios dentro del login */
+    .login form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+/* Etiquetas */
+label {
+    color: #fff;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+/* Estilos de los inputs */
+input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 12px;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    margin: 10px 0;
+    font-size: 1em;
+    transition: 0.3s;
+}
+
+    /* Estilo cuando el input recibe foco */
+    input:focus {
+        background: #fff;
+        box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+    }
+
+/* Estilo de los mensajes de error */
+.text-danger {
+    color: #ff4d4d;
+    font-size: 0.9em;
+    text-align: left;
+    width: 100%;
+}
+
+/* Estilo del botón principal */
+button {
+    width: 100%;
+    height: 45px;
+    color: #fff;
+    background: #573b8a;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-top: 10px;
+    outline: none;
+    border: none;
+    border-radius: 8px;
+    transition: 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+    /* Efecto de hover para el botón */
+    button:hover {
+        background: #6d44b8;
+        transform: scale(1.05);
+    }
+
+/* Estilos para los botones en un grupo */
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 15px;
+    gap: 10px;
+}
+
+    /* Ajustes para botones dentro del grupo */
+    .button-group button {
+        width: 50%;
+    }
+
+/* Ajustes para dispositivos pequeños */
+@media (max-width: 400px) {
+    .main {
+        width: 90%;
+    }
+}

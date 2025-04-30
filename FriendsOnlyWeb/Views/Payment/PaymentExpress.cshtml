@@ -1,0 +1,92 @@
+﻿@using Application.ViewModels.Payments.ExpressPayment
+@model ExpressPaymentVM
+
+<div class="main-dashboard">
+    <h1 class="text-center">Pago Expreso</h1>
+
+    <!-- Formulario de pago expreso -->
+    <form asp-action="PaymentExpress" method="post" id="paymentExpressForm">
+        <div class="mb-3">
+            <label for="AccountNumber" class="form-label">Número de Cuenta</label>
+            <input type="number" class="form-control" asp-for="AccountNumber" id="AccountNumber" placeholder="Ingrese el número de cuenta" required />
+            <span asp-validation-for="AccountNumber" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label for="amount" class="form-label">Monto</label>
+            <input type="number" class="form-control" asp-for="amount" id="amount" placeholder="Ingrese el monto" min="1" step="0.01" required />
+            <span asp-validation-for="amount" class="text-danger"></span>
+        </div>
+
+        @if (Model?.accounts != null && Model.accounts.Any())
+        {
+            <div class="mb-3">
+                <label for="SelectedAccountId" class="form-label">Cuenta de Origen</label>
+                <select class="form-select" asp-for="SelectedAccountId" id="SelectedAccountId"
+                        asp-items="@(new SelectList(Model.accounts, "Id", "Balance", Model.SelectedAccountId))" required>
+                    <option value="">Seleccione una cuenta</option>
+                </select>
+                <span asp-validation-for="SelectedAccountId" class="text-danger"></span>
+            </div>
+
+        }
+        else
+        {
+            <p>No hay cuentas disponibles.</p>
+        }
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary w-100">Realizar Pago</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const selectElement = document.getElementById('SelectedAccountId');
+            const amountInput = document.getElementById('amount');
+
+            // Función para validar monto
+            function validateAmount() {
+                const selectedAccountId = selectElement.value;
+                const amount = parseFloat(amountInput.value);
+
+                if (selectedAccountId && amount > 0) {
+                    const selectedAccount = @Html.Raw(Json.Serialize(Model.accounts)); // Convert accounts list to JS object
+                    const account = selectedAccount.find(acc => acc.Id == selectedAccountId);
+
+                    if (account && amount > account.Balance) {
+                        alert('El monto no puede ser mayor al balance de la cuenta seleccionada.');
+                        amountInput.value = ''; // Clear the amount field
+                    }
+                }
+            }
+
+            // Validar el monto antes de enviar el formulario
+            document.getElementById('paymentExpressForm').addEventListener('submit', function (e) {
+                const accountNumber = document.getElementById('AccountNumber').value.trim();
+                const amount = parseFloat(document.getElementById('amount').value);
+                const accountSelected = document.getElementById('SelectedAccountId').value;
+
+                if (!accountNumber) {
+                    alert('El número de cuenta es requerido.');
+                    e.preventDefault();
+                } else if (!accountSelected) {
+                    alert('Debe seleccionar una cuenta de origen.');
+                    e.preventDefault();
+                } else if (!amount || amount <= 0) {
+                    alert('El monto debe ser mayor que 0.');
+                    e.preventDefault();
+                } else {
+                    validateAmount(); // Validate the amount based on selected account
+                }
+            });
+
+            // Event listener to validate amount on input change
+            amountInput.addEventListener('input', validateAmount);
+        })();
+    </script>
+}
+
+

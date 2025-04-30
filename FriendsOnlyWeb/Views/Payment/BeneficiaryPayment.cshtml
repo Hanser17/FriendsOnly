@@ -1,0 +1,57 @@
+﻿@using Application.ViewModels.Payments.BeneficiaryPayment
+@model BeneficiaryPayemtnVM
+
+<div class="main-dashboard">
+    <h1 class="text-center">Pago a Beneficiarios</h1>
+
+    <!-- Formulario de pago expreso -->
+    <form asp-action="BeneficiaryPayment" method="post" id="BeneficiaryPaymentForm">
+        @if (Model?.beneficiaries != null && Model.beneficiaries.Any())
+        {
+            
+        
+            <div class="mb-3">
+                <label for="AccountNumber" class="form-label">Destino</label>
+                <select class="form-select" asp-for="AccountNumber" id="AccountNumber"
+                        asp-items="@(Model.beneficiaries.Select(b => new SelectListItem { Value = b.AccountNumber.ToString(), Text = $"{b.FirstName} {b.LastName}" }))" required>
+                    <option value="">Seleccione Beneficiario</option>
+                </select>
+                <span asp-validation-for="AccountNumber" class="text-danger"></span>
+            </div>
+
+
+            <div class="mb-3">
+                <label for="amount" class="form-label">Monto</label>
+                <input type="number" class="form-control" asp-for="amount" id="amount" placeholder="Ingrese el monto" min="1" step="0.01" required />
+                <span asp-validation-for="amount" class="text-danger"></span>
+            </div>
+
+            @if (Model?.accounts != null && Model.accounts.Any())
+            {
+                <div class="mb-3">
+                    <label for="SelectedAccountId" class="form-label">Cuenta de Origen</label>
+                    <select class="form-select" asp-for="SelectedAccountId" id="SelectedAccountId"
+                            asp-items="@(Model.accounts.Select(a => new SelectListItem { Value = a.Id.ToString(), Text = $"{a.Id} - {a.Balance:C}" }))" required>
+                        <option value="">Seleccione una cuenta</option>
+                    </select>
+                    <span asp-validation-for="SelectedAccountId" class="text-danger"></span>
+                </div>
+
+            }
+            else
+            {
+                <p>No hay beneficiarios agregados .</p>
+            }
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary w-100">Realizar Pago</button>
+            </div>
+        }
+        else
+        {
+            <p>No hay Tarjetas Dispobibles.</p>
+        }
+
+
+    </form>
+</div>

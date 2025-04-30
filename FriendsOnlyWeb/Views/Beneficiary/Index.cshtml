@@ -1,0 +1,146 @@
+﻿@using Application.ViewModels.Beneficiary
+@model IEnumerable<BeneficiaryVM>
+
+<div class="main-dashboard">
+    <h1>Lista de Beneficiarios</h1>
+
+    <div class="text-center mb-4">
+        <a href="@Url.Action("Create", "Beneficiary")" class="btn btn-success">
+            Agregar Beneficiario
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning text-center" role="alert">
+            No hay beneficiarios agregados. Por favor, añada uno utilizando el botón "Agregar Beneficiario".
+        </div>
+    }
+    else
+    {
+        <!-- Tabla de Beneficiarios -->
+        <div class="user-list">
+            <table class="table table-bordered ">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var beneficiary in Model)
+                    {
+                        <tr>
+                            <td>@beneficiary.FirstName</td>
+                            <td>@beneficiary.LastName</td>
+                            <td>
+                                <button class="btn btn-danger btn-sm" onclick="confirmDelete(@beneficiary.Id)">
+                                    Eliminar
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+<script>
+    // Confirmación para eliminar
+    function confirmDelete(id) {
+        if (confirm("¿Está seguro de eliminar este beneficiario?")) {
+            window.location.href = `/Beneficiary/Delete/${id}`;
+        }
+    }
+</script>
+
+<!-- Estilos -->
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        
+        color: #333;
+    }
+
+    .main-dashboard {
+        width: 90%;
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+
+    .btn-add-user {
+        display: inline-block;
+        padding: 10px 15px;
+        margin-bottom: 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+        .btn-add-user:hover {
+            background-color: #0056b3;
+        }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+    table th, table td {
+        padding: 12px;
+        text-align: left;
+        
+    }
+
+    table th {
+        background-color: #007bff;
+      
+    }
+
+    
+
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+
+    .alert {
+        padding: 15px;
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+        border-radius: 5px;
+    }
+</style>
+
+
+
+
+
+
+
+
